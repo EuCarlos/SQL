@@ -79,33 +79,50 @@ INSERT INTO orcamento (num_os ,valor_orcamento, idCliente_orcamento)VALUES
 ------------------------------------------------------------------------------------------------
 
 -- View que lista até 10 status da ordem de serviço do cliente com o valor do serviço
-CREATE VIEW vw_ordem_de_servico_com_valor AS SELECT 
-	c.nome_completo, 
-    o.valor_orcamento, 
-    os.status_os 
-FROM cliente c
-INNER JOIN orcamento o
-ON c.idCliente = o.idCliente_orcamento
-JOIN ordem_de_servico os
-ON os.idOrdemDeServico = o.idCliente_orcamento
-LIMIT 10;
+CREATE VIEW vw_ordem_de_servico_com_valor AS 
+    SELECT 
+        c.nome_completo, 
+        o.valor_orcamento, 
+        os.status_os 
+    FROM cliente c
+    INNER JOIN orcamento o
+    ON c.idCliente = o.idCliente_orcamento
+    JOIN ordem_de_servico os
+    ON os.idOrdemDeServico = o.idCliente_orcamento
+    LIMIT 10;
 
 SELECT * FROM ordem_de_servico_com_valor;
 
 -- View que lista até 10 clientes e apresenta o tipo de serviço solicitado, com o nome do mecanico resposavel
-CREATE VIEW vw_mecanico_responsavel_pelo_servico AS SELECT 
-	c.nome_completo AS cliente, 
-    os.descricao_serviço, 
-    f.nome AS mecanico
-FROM cliente c
-INNER JOIN ordem_de_servico os
-ON c.idCliente = os.idCliente_os
-JOIN funcionario f
-ON f.idFuncionario = os.idMecanico_os
-LIMIT 10;
+CREATE VIEW vw_mecanico_responsavel_pelo_servico AS 
+    SELECT 
+        c.nome_completo AS cliente, 
+        os.descricao_serviço, 
+        f.nome AS mecanico
+    FROM cliente c
+    INNER JOIN ordem_de_servico os
+    ON c.idCliente = os.idCliente_os
+    JOIN funcionario f
+    ON f.idFuncionario = os.idMecanico_os
+    LIMIT 10;
 
 SELECT * FROM mecanico_responsavel_pelo_servico;
 
 -- Remove as views
 DROP VIEW vw_ordem_de_servico_com_valor;
 DROP VIEW vw_mecanico_responsavel_pelo_servico;
+
+-- VIEW materializada
+CREATE MATERIALIZED VIEW vw_cliente AS 
+SELECT
+	nome_completo,
+    modelo_do_veiculo,
+    placa_do_veiculo
+FROM cliente
+LIMIT 10;
+
+-- Atualiza os dados presentes na VIEW materializada
+REFRESH MATERIALIZED VIEW vw_cliente;
+
+-- Remove a VIEW materializada
+DROP MATERIALIZED VIEW vw_cliente;
