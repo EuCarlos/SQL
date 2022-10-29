@@ -1,40 +1,57 @@
-CREATE TABLE "states" (
-     "id_state" int PRIMARY KEY NOT NULL,
-     "abbreviation" varchar(2) NOT NULL CHECK ("abbreviation" <> ''),
-     "state_value" varchar(60) NOT NULL CHECK ("state_value" <> '')
+-- MySQL
+CREATE TABLE states (
+     id_state INT PRIMARY KEY NOT NULL,
+     ibge_code INT NOT NULL CHECK ("ibge_code" <> ''),
+     abbreviation CHAR(2) NOT NULL CHECK ("abbreviation" <> ''),
+     state_value VARCHAR(60) NOT NULL CHECK ("state_value" <> ''),
+     region ENUM('Norte', 'Nordeste', 'Sudeste', 'Sul', 'Centro-Oeste')
 );
 
-INSERT INTO "states" VALUES
-(1, 'AC', 'Acre'),
-(2, 'AL', 'Alagoas'),
-(3, 'AP', 'Amapá'),
-(4, 'AM', 'Amazonas'),
-(5, 'BA', 'Bahia'),
-(6, 'CE', 'Ceará'),
-(7, 'DF', 'Distrito Federal'),
-(8, 'ES', 'Espírito Santo'),
-(9, 'GO', 'Goiás'),
-(10, 'MA', 'Maranhão'),
-(11, 'MT', 'Mato Grosso'),
-(12, 'MS', 'Mato Grosso do Sul'),
-(13, 'MG', 'Minas Gerais'),
-(14, 'PA', 'Pará'),
-(15, 'PB', 'Paraíba'),
-(16, 'PR', 'Paraná'),
-(17, 'PE', 'Pernambuco'),
-(18, 'PI', 'Piauí'),
-(19, 'RJ', 'Rio de Janeiro'),
-(20, 'RN', 'Rio Grande do Norte'),
-(21, 'RS', 'Rio Grande do Sul'),
-(22, 'RO', 'Rondônia'),
-(23, 'RR', 'Roraima'),
-(24, 'SC', 'Santa Catarina'),
-(25, 'SP', 'São Paulo'),
-(26, 'SE', 'Sergipe'),
-(27, 'TO', 'Tocantins');
+INSERT INTO states (id_state, ibge_code, abbreviation, state_value, region) VALUES
+(1, 12, 'AC', 'Acre', 'Norte'),
+(2, 27, 'AL', 'Alagoas', 'Nordeste'),
+(3, 16, 'AP', 'Amapá', 'Norte'),
+(4, 13, 'AM', 'Amazonas', 'Norte'),
+(5, 29, 'BA', 'Bahia', 'Nordeste'),
+(6, 23, 'CE', 'Ceará', 'Nordeste'),
+(7, 53, 'DF', 'Distrito Federal', 'Centro-Oeste'),
+(8, 32, 'ES', 'Espírito Santo', 'Sudeste'),
+(9, 52, 'GO', 'Goiás', 'Centro-Oeste'),
+(10, 21, 'MA', 'Maranhão', 'Nordeste'),
+(11, 51, 'MT', 'Mato Grosso', 'Centro-Oeste'),
+(12, 50, 'MS', 'Mato Grosso do Sul', 'Centro-Oeste'),
+(13, 31, 'MG', 'Minas Gerais', 'Sudeste'),
+(14, 15, 'PA', 'Pará', 'Norte'),
+(15, 25, 'PB', 'Paraíba', 'Nordeste'),
+(16, 41, 'PR', 'Paraná', 'Sul'),
+(17, 26, 'PE', 'Pernambuco', 'Nordeste'),
+(18, 22, 'PI', 'Piauí', 'Nordeste'),
+(19, 33, 'RJ', 'Rio de Janeiro', 'Sudeste'),
+(20, 24, 'RN', 'Rio Grande do Norte', 'Nordeste'),
+(21, 43, 'RS', 'Rio Grande do Sul', 'Sul'),
+(22, 11, 'RO', 'Rondônia', 'Norte'),
+(23, 14, 'RR', 'Roraima', 'Norte'),
+(24, 42, 'SC', 'Santa Catarina', 'Sul'),
+(25, 35, 'SP', 'São Paulo', 'Sudeste'),
+(26, 28, 'SE', 'Sergipe', 'Nordeste'),
+(27, 17, 'TO', 'Tocantins', 'Norte');
 
 
-SELECT COUNT(*) AS quant_estados from states
+SELECT COUNT(*) AS quant_estados from states;
 
 SELECT abbreviation, state_value from states
-ORDER BY abbreviation ASC
+ORDER BY abbreviation ASC;
+
+SELECT 
+     ibge_code,
+     abbreviation AS state,
+     region
+FROM states
+WHERE region = 'Centro-Oeste'
+
+SELECT 
+	DISTINCT region,
+     COUNT(region) AS quant_de_estados
+FROM states
+GROUP BY region
+ORDER BY region;
